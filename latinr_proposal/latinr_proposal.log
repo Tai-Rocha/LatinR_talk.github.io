@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.6.13)  13 JUN 2022 17:03
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.6.13)  13 JUN 2022 17:44
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -716,31 +716,32 @@ Package caption Info: End \AtBeginDocument code.
 Package hyperref Warning: Difference (2) between bookmark levels is greater 
 (hyperref)                than one, level fixed on input line 123.
 
-File: img/workflow.png Graphic file (type bmp)
-<img/workflow.png>
-LaTeX Font Info:    Trying to load font information for T1+zi4 on input line 140.
+LaTeX Font Info:    Trying to load font information for T1+zi4 on input line 133.
 (/home/tai-rocha/.TinyTeX/texmf-dist/tex/latex/inconsolata/t1zi4.fd
 File: t1zi4.fd 2018/01/14 T1/zi4 (Inconsolata)
 )
 LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
-(Font)              scaled to size 9.18004pt on input line 140.
+(Font)              scaled to size 9.18004pt on input line 133.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `zi4' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 [1
 
-] [2] (./latinr_proposal.aux)
+]
+File: img/workflow.png Graphic file (type bmp)
+<img/workflow.png>
+[2] (./latinr_proposal.aux)
 Package rerunfilecheck Info: File `latinr_proposal.out' has not changed.
 (rerunfilecheck)             Checksum: 6A96097109852387505E1C3CE9E92FCA;543.
  ) 
 Here is how much of TeX's memory you used:
- 26881 strings out of 477868
- 496675 string characters out of 5846458
- 823840 words of memory out of 5000000
- 47345 multiletter control sequences out of 15000+600000
+ 26885 strings out of 477868
+ 496729 string characters out of 5846458
+ 822833 words of memory out of 5000000
+ 47349 multiletter control sequences out of 15000+600000
  480710 words of font info for 40 fonts, out of 8000000 for 9000
  16 hyphenation exceptions out of 8191
- 115i,11n,131p,1012b,547s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 115i,11n,131p,1012b,549s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 Output written on latinr_proposal.pdf (2 pages).
