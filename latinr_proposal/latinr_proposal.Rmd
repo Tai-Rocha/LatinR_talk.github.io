@@ -1,0 +1,54 @@
+---
+type: oral   # List of types is available using latinr_types()
+language: portuguese
+title: "GridDER: Grid Detection and Evaluation in R"
+authors:
+  - first_name: Tainá
+    last_name: Rocha
+    email: taina013@gmail.com   # One author's email has to match the email registered in EasyChair.
+    country: br  # List of countries available using latinr::latinr_countries()
+    affiliation: "  Programa de Pesquisa em Biodiversidade do Ministério da Ciência, Tecnologia e Inovação , Brasil | Biogeography, Statistical Models and Informatics laboratory- Department of Geography, Florida State University, USA"
+    url: "https://tainaweb-en.netlify.app/"  # Optional 
+    corresponding: true
+keywords: 
+  - "R package"
+  - "biodiversity"
+  - "occurence data"
+abstract: |
+  Observações e coleções de organismos formam a base de nossa compreensão da biodiversidade da Terra e são um recurso indispensável para inúmeros estudos. A informação geográfica é fundamental, servindo de elo entre os organismos e os ambientes em que residem. No entanto, a informação geográfica associada a esses registros é muitas vezes imprecisa, limitando sua eficácia para pesquisas. Nessa linha, foram desenvolvidas várias soluções para identificar coordenadas errôneas e georreferenciados a centróides de países, estados ou municípios. Outra fonte de imprecisões proeminente, mas menos discutida e documentada, surge devido ao uso grades em muitas regiões do mundo. Por isso, desenvolvemos o pacote R GridDER,  para identificar registros de biodiversidade provenientes de sistemas de grades. Nossa ferramenta também estima o grau de heterogeneidade ambiental associado a essas grades, permitindo que os usuários tomem decisões informadas sobre como usar esses dados de ocorrência em estudos de mudanças globais. Mostramos que uma proporção significativa (~ 13,5%; 261 milhões) de registros no GBIF, o maior coleção de dados de coleta de história natural, são dados potencialmente em grade e demonstramos que nossa ferramenta pode identificar esses registros de forma confiável e quantificar as incertezas associadas. Portanto, O GridDER pode servir como uma ferramenta não apenas para triagem de dados georreferenciados em grade, mas para quantificar as incertezas geográficas e ambientais associadas a esses registros, que podem ser usados para informar modelos e análises que utilizam esses dados, incluindo aqueles referentes a mudanças globais.
+bibliography: latinr_bibliography.bib
+biblio-style: apalike-es   
+output: 
+    latinr::latinr_article:
+      keep_tex: false
+      anonymise: true
+params: 
+  check_is_error: FALSE
+---
+
+
+```{r submission-checks, echo=FALSE, warning=TRUE}
+# Runs some basic checks in metadata. To disable, set check_is_error to FALSE
+latinr::latinr_checks(rmarkdown::metadata, params$check_is_error)
+```
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Métodos e fluxo de trabalho do pacote
+
+```{r image, out.width="90%", fig.align='right', fig.cap="Fig. 1 Fluxo de trabalho do pacote GridDER"}
+knitr::include_graphics("/home/tai-rocha/Documents/Github/Presentations/LatinR_talk/latinr_proposal/img/workflow.png")
+```
+  
+  Compilamos os seguintes metadados de sistemas de grade: nome de um sistema de grade (se disponível), nome(s) do país e código(s) ISO-3166 (se um sistema de grade for aplicável a um ou vários países), o European Petroleum Survey Group ( EPSG) do CRS (o EPSG hospeda um banco de dados de CRSs), a resolução do sistema de grade em dimensões horizontais e verticais (tamanho e unidade) e a extensão espacial. Com os metadados compilados de sistemas de grade, simulamos sistemas de grade como vetores espaciais. Em resumo, desenvolvemos a função  `grid_generation` para simular pontos regularmente espaçados representando os quatro vértices de grades em um sistema de grades. Criamos também outras funções para simular sistemas de grade com base em ocorrências empíricas em grade. Isso se aplica a situações em que não há metadados disponíveis ou quando os metadados de um sistema de grade estão incompletos. Dentre os metadados utilizados para simular uma grade, o CRS é o atributo mais importante; quase sempre é verdade para um conjunto de dados espaciais. O SRC com o qual um sistema de grade e ocorrências em grade são originalmente definidos pode se perder durante a agregação de dados, onde ocorrências de diferentes fontes com diferentes CRSs são comumente unificadas no mesmo SRC (por exemplo, WGS84).
+  
+  Desenvolvemos uma função `infer_crs` para inferir o CRS de um sistema de grade, usando coordenadas associadas a um sistema de grade desconhecido como entrada. Em situações em que um CRS, uma unidade de distância espacial, é conhecido, e a resolução espacial é desconhecida, desenvolvemos uma função (infer_resolution) para inferir a resolução espacial com base nas ocorrências de entrada. Desenvolvemos uma função (infer_origin) para calcular a origem das malhas quando o CRS e as resoluções espaciais são conhecidos. A origem é calculada como o mínimo xey entre os pontos espaciais de entrada menos metade da resolução ao longo dos eixos xey, respectivamente. A extensão espacial de um sistema de grade pode ser calculada pela função `infer_extent`. A extensão pode ser simplesmente a extensão espacial onde um SRC é definido, a caixa delimitadora de um limite de país ou a caixa delimitadora das ocorrências em grade. A extensão espacial também pode ser mascarada para estar ao longo da fronteira de um país. Buffers adicionais, na unidade de resolução de grade, também podem ser adicionados junto com o sistema de grade, utilizando o parâmetro `flag_buffer` da função `grid_generation`. Também é possível calcular dois tipos de incerteza para cada grade do sistema :
+1- incerteza ambiental  com a função `assess_env_uncertainty` que calcula o desvio padrão variáveis ambientais para de cada grad. O padrão do GridDE é o dado de elevação com 30 metros de resolução (NASDEM https://developers.google.com/earth-engine/datasets/catalog/NASA_NASADEM_HGT_001), mas outras variáveis podem ser fornecidas pelo usuário; 2- incerteza espacial com função `assess_sp_uncertainty`, calcula a distância entre os centróides da grade e as coordenadas.
+
+
+
+O pacote ainda não está no CRAN, contudo, existe um preprint disponível e submetido ao periódico  Global Ecology and Biogeography. Com as devidas revisões e contribuições, esperamos que em breve possamos submeter o pacote ao CRAN.
+
