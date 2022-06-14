@@ -11,9 +11,9 @@ authors:
     url: "https://tainaweb-en.netlify.app/"  # Optional 
     corresponding: true
 keywords: 
-  - "R package"
-  - "biodiversity"
-  - "occurence data"
+  - "Pacote R"
+  - "Biodiversidade"
+  - "Dados de ocorrência"
 abstract: |
   Observações e coleções de organismos formam a base da nossa compreensão sobre a biodiversidade da Terra e são um recurso indispensável para inúmeros estudos. A informação geográfica é fundamental, servindo de elo entre os organismos e os ambientes em que residem. No entanto, a informação geográfica associada a esses registros é muitas vezes imprecisa, limitando a sua eficácia para pesquisas. Nessa linha, foram desenvolvidas várias soluções para identificar coordenadas errôneas e georreferenciados a centroides de países, estados ou municípios. Outra fonte de imprecisões proeminente, mas menos discutida e documentada, surge devido ao uso grades ( em muitas regiões do mundo. Por isso, desenvolvemos o pacote R GridDER,  para identificar registros de biodiversidade provenientes de sistemas de grades. Nossa ferramenta também estima o grau de heterogeneidade ambiental associado a essas grades, permitindo que os usuários tomem decisões informadas sobre como usar esses dados de ocorrência em estudos de mudanças globais. Mostramos que uma proporção significativa (~ 13,5%; 261 milhões) de registros no GBIF, a maior coleção de dados de coleta de história natural, são dados potencialmente em grade e demonstramos que nossa ferramenta pode identificar esses registros de forma confiável e quantificar as incertezas associadas. Portanto, o GridDER pode servir como uma ferramenta não apenas para triagem de dados georreferenciados em grade, mas para quantificar as incertezas geográficas e ambientais associadas a esses registros, que podem ser usados para informar modelos e análises que utilizam esses dados, incluindo aqueles referentes a mudanças globais.
 bibliography: latinr_bibliography.bib

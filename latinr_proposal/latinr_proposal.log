@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.6.13)  14 JUN 2022 11:43
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.6.13)  14 JUN 2022 11:56
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -738,7 +738,7 @@ Package rerunfilecheck Info: File `latinr_proposal.out' has not changed.
 Here is how much of TeX's memory you used:
  26887 strings out of 477868
  496764 string characters out of 5846458
- 824833 words of memory out of 5000000
+ 824869 words of memory out of 5000000
  47351 multiletter control sequences out of 15000+600000
  481607 words of font info for 41 fonts, out of 8000000 for 9000
  16 hyphenation exceptions out of 8191
