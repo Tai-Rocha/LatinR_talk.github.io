@@ -137,7 +137,7 @@ print(result_res$res_x)
 
 ### Inferir a extensão espacial 
 
-```{r infer_extent, echo=TRUE}
+```{r infer_extent, echo=TRUE, warning=FALSE}
 result_ext = gridder::infer_extent(method="crs_extent",
                           crs_grid=results_crs$selected$code[1],
                           flag_adjust_by_res=TRUE,

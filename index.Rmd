@@ -54,10 +54,23 @@ Ex.: Dados de grade GBIF
 knitr::include_graphics("images/grades.png")
 ```
 ---
+[GridDER: Grid Detection and Evaluation in R, 2022](https://ecoevorxiv.org/6qy5u/)
+<br/>
+<br/>
+.pull-left[
+```{r gridder_3, echo=FALSE, fig.align='center', out.width="50%"}
+knitr::include_graphics("images/logo.png")
+```
+]
+
+```{r paper, echo=FALSE, fig.align='center', out.width="50%"}
+knitr::include_url("https://ecoevorxiv.org/6qy5u/", height = 450)
+```
+---
 
 class: chapter-slide
 
-# Instação e funções do pacote
+# Instalação e funções do pacote
 
 ---
 #### Instalação
@@ -127,19 +140,24 @@ ggplot() +
 Inferir o CRS (sistema de referência de coordenadas)
 
 ```{r infer_crs, echo=TRUE, eval=FALSE}
-# results_crs = gridder::infer_crs(occ_path = occs_unique, cup_num = 2) 
+
+# results_crs = gridder::infer_crs(occ_path = occs_unique, cup_num = 4) 
+
+# readr::write_rds(mtcars, "latinr_proposal/results_crs.rds", "xz", compression = 9L)
+
 ```
 ---
 ### `infer_crs`
 
 Vamos ler o resultado que está salvo em .rds
 
-```{r results_crs, echo=TRUE, eval=FALSE, warning=TRUE}
-#results_crs = readRDS("results_crs")
-#print(results_crs$selected[1:5, c("code", "note")])
+```{r results_crs, echo=TRUE, warning=TRUE}
+results_crs = readRDS("latinr_proposal/results_crs.rds")
+
+print(results_crs$selected[1:5, c("code", "note")])
 ```
 ---
-### `infer_resolution`
+### `load_occ` 
 
 Ler as ocorrências como objeto espacial 
 
@@ -148,7 +166,6 @@ Ler as ocorrências como objeto espacial
 input_occ = gridder::load_occ(occs_unique)
 ```
 ---
-### `infer_resolution`
 
 Atribuindo o CRS correto 
 
@@ -175,24 +192,20 @@ print(result_res$res_x)
 Inferir a extensão espacial 
 
 ```{r infer_extent, echo=TRUE}
-# result_ext = gridder::infer_extent(method="crs_extent",
-#                           crs_grid=results_crs$selected$code[1],
-#                           flag_adjust_by_res=TRUE,
-#                           res_x=result_res$res_x,
-#                           res_y=result_res$res_y)
-# 
-# print(result_ext)
-
+result_ext = gridder::infer_extent(method="crs_extent",
+                           crs_grid=2154,
+                           flag_adjust_by_res=TRUE,
+                           res_x=result_res$res_x,
+                           res_y=result_res$res_y)
+ 
+print(result_ext)
 ```
 ---
 ### `grid_generation`
 
 Simulando um sistema de grade baseado em metadados
 
-```{r metadata, echo=TRUE}
 
-
-```
 
 ---
 ### `grid_generation`
@@ -200,17 +213,15 @@ Simulando um sistema de grade baseado em metadados
 Simulando um sistema de grade baseado em metadados
 
 ```{r grid_generation}
-# simulated_grid = gridder::grid_generation(res_x=result_res$res_x,
-#                                           res_y=result_res$res_y,
-#                                           unit="m",
-#                                           flag_crs=TRUE,
-#                                           country="France",
-#                                           extent_unit="empirical_occ_extent",
-#                                           input_extent=result_ext,
-#                                           flag_offset=c(0,-result_res$res_y*10,
-#                                                         result_res$res_x*10,0),
-#                                           crs_num=results_crs$selected$code[1],
-#                                           flag_maskByCountry=TRUE)
+simulated_grid = gridder::grid_generation(res_x=40000,
+                                           res_y=20000,
+                                           unit="m",
+                                           flag_crs=TRUE,
+                                           country="France",
+                                           extent_unit="empirical_occ_extent",
+                                           input_extent=result_ext,
+                                           crs_num=2154,
+                                           flag_maskByCountry=TRUE)
 ```
 ---
 ### `grid_generation`
@@ -218,10 +229,11 @@ Simulando um sistema de grade baseado em metadados
 Checando o sistema de grade simulada com as ocorrências
 
 ```{r check simulated, echo= TRUE}
-# plot(simulated_grid,
-#       xlim=c(extent(input_occ_prj)[1],extent(input_occ_prj)[1]+110000),
-#       ylim=c(extent(input_occ_prj)[3],extent(input_occ_prj)[3]+110000))
-# plot(input_occ_prj,add=T,col="red")
+plot(simulated_grid,
+   xlim=c(extent(input_occ_prj)[1],extent(input_occ_prj)[1]+110000),
+   ylim=c(extent(input_occ_prj)[3],extent(input_occ_prj)[3]+110000))
+
+plot(input_occ_prj,add=T,col="red")
 ```
 
 ---
@@ -264,13 +276,13 @@ std_dev = gridder::assess_env_uncertainty(x= nasadem, y= grid)
 ```{r uncert_2, echo=TRUE}
 print(std_dev, n=5)
 ```
-print(std_dev, n=5)
 ---
 
 Visualizando a variação ambiental no espaço geográfico
 <br/>
 <br/>
 <br/>
+
 ```{r uncert_plot_code, echo=TRUE, eval=FALSE}
 library(ggplot2)
 ggplot(data = grid_ID_9) +
