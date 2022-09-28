@@ -1,7 +1,7 @@
 ---
 title: "GridDER"
 subtitle: "Grid detection and evaluation in R"
-author: "Tainá Rocha"
+author: " "
 institute: "Latin R 2022"
 date: "10-12 de octubre de 2022"
 output:
@@ -12,97 +12,306 @@ output:
     nature:
       ratio: '16:9'
 ---
+name: hello
+class: middle, center, inverse
 
-# Header 1
+#### `r rmarkdown::metadata$author`
 
-Agrega algo de texto aquí
+<img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/11633554?v=4" width="150px"/>
 
-## Header 2
+Pesquisadora e Cientista de Dados <br>
+Atuação: Biodiversidade e Mudanças Globais <br>
+Bióloga | MSc. Biologia Ambiental | PhD. in Zoologia <br> 
 
-Agrega algo de texto aquí
+[`r fontawesome::fa("github")` @Tai-Rocha](https://github.com/Tai-Rocha)    
+[`r fontawesome::fa("twitter")` @Tai_Rocha_](https://twitter.com/Tai_Rocha_)   
+[`r fontawesome::fa("link")` tainaweb-en.netlify.app](https://tainaweb-en.netlify.app/)
+---
+[GridDER: Grid Detection and Evaluation in R, 2022](https://ecoevorxiv.org/6qy5u/)
+<br/>
+<br/>
+.pull-left[
+```{r gridder, echo=FALSE, fig.align='center', out.width="50%"}
+knitr::include_graphics("images/logo.png")
+```
+]
+Uma solução para melhorar o uso dos dados do GBIF pelos usuários:
 
-### Header 3
+- Rastrear pontos em grade
 
-```{r}
-# Agrega tu código
-seq(1:5)
+- Quantificar incerteza geográfica e ambiental 
+---
+[GridDER: Grid Detection and Evaluation in R, 2022](https://ecoevorxiv.org/6qy5u/)
+<br/>
+<br/>
+.pull-left[
+```{r gridder_2, echo=FALSE, fig.align='center', out.width="50%"}
+knitr::include_graphics("images/logo.png")
+```
+]
+Ex.: Dados de grade GBIF
+```{r sisgrades, echo=FALSE, fig.align='center', out.width="50%"}
+knitr::include_graphics("images/grades.png")
 ```
 ---
 
 class: chapter-slide
 
-# Capítulo nuevo
+# Instação e funções do pacote
 
 ---
+#### Instalação
 
-## Crea algunas gráficas
+```{r install package, echo= TRUE,warning=FALSE,eval=FALSE}
+# remotes::install_github("BiogeographyLab/gridder")
+```
+---
+#### Dados  
 
-Recomendamos usar el paquete [viridis](https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html) para crear gráficas amigables con las personas con daltonismo. 
+```{r data, warning=FALSE, echo=TRUE}
+library(gridder)
+data("occs_unique") 
+data("ne_10m_admin_0_countries")
+```
+---
+#### Dados de ocorrência 
 
-Veamos cómo lucen algunas gráficas con diversos tipos de dificultades visuales usando [colorblindr](https://github.com/clauswilke/colorblindr):
+```{r occs_unique, warning=TRUE, echo=TRUE}
+print(occs_unique, n=5)
+```
+---
+#### Shapefile dos países
 
-```{r, echo=FALSE, message=FALSE}
-library(datos)
+```{r shape, warning=TRUE, echo=TRUE}
+ne_10m_admin_0_countries
+```
+---
+#### Visulizando os pontos no shapefile
+
+```{r code_plot, warning=FALSE, echo=TRUE,fig.width=5,fig.height=5}
 library(ggplot2)
-library(colorblindr)
-library(viridis)
+library(broom)
+
+
+spdf_fortified = tidy(ne_10m_admin_0_countries, region = "ADMIN")
+ggplot() +
+  geom_polygon(data = spdf_fortified, 
+               aes( x = long, y = lat, group = group), 
+               fill="#69b3a2", color="white") +
+  geom_point(data = occs_unique,
+             aes(x = decimalLongitude, y = decimalLatitude), 
+             size = 2, 
+        shape = 23, fill = "darkred") +
+    coord_sf(xlim = c(-10, 20), ylim = c(40, 60), expand = FALSE)
+```
+---
+#### Visulizando os pontos no shapefile
+
+```{r data_plot, warning=FALSE, echo=FALSE, fig.align='center', fig.width=8,fig.height=8}
+library(ggplot2)
+library(broom)
+spdf_fortified = tidy(ne_10m_admin_0_countries, region = "ADMIN")
+ggplot() +
+  geom_polygon(data = spdf_fortified, 
+               aes( x = long, y = lat, group = group), 
+               fill="#69b3a2", color="white") +
+  geom_point(data = occs_unique,
+             aes(x = decimalLongitude, y = decimalLatitude), 
+             size = 2, 
+        shape = 23, fill = "darkred") +
+    coord_sf(xlim = c(-10, 20), ylim = c(40, 60), expand = FALSE)
+```
+---
+### `infer_crs`
+
+Inferir o CRS (sistema de referência de coordenadas)
+
+```{r infer_crs, echo=TRUE, eval=FALSE}
+# results_crs = gridder::infer_crs(occ_path = occs_unique, cup_num = 2) 
+```
+---
+### `infer_crs`
+
+Vamos ler o resultado que está salvo em .rds
+
+```{r results_crs, echo=TRUE, eval=FALSE, warning=TRUE}
+#results_crs = readRDS("results_crs")
+#print(results_crs$selected[1:5, c("code", "note")])
+```
+---
+### `infer_resolution`
+
+Ler as ocorrências como objeto espacial 
+
+```{r infer_resolution_1, echo=TRUE, warning=FALSE}
+
+input_occ = gridder::load_occ(occs_unique)
+```
+---
+### `infer_resolution`
+
+Atribuindo o CRS correto 
+
+```{r infer_resolution_2, echo=TRUE, warning=FALSE}
+input_occ_prj = sp::spTransform(input_occ,
+                                crs(paste0("+init=epsg:","2154"))
+                                )
+```
+---
+### `infer_resolution`
+
+Inferir a resolução espacial 
+
+```{r infer_resolution_3, echo=TRUE}
+result_res=gridder::infer_resolution(input_coord = input_occ_prj@coords,
+                                       flag_unit="meter")
+print(result_res$res_x)
+
 ```
 
 ---
-class: middle, center
+### `infer_extent`
 
-```{r,echo=FALSE,warning=FALSE,message=FALSE,fig.show="hold",out.width="50%",fig.alt= "Se muestran gráficas de densidad con los datos de la masa corporal de pinguinos de las especies Adelie, Chinstrap y Gentoo del conjunto de datos pinguinos del paquete en español datos, separados por color de acuerdo con la especie, usando la escala de color automática de ggplot2. En la columna izquierda se están utilizando los colores rosa, verde y azul. En la columna derecha se muestra la simulación de cómo se vería la gráfica de la izquierda considerando cuatro deficiencias visuales: Deutanomalía,Protanomalía, Tritanomalía y Desaturado."}
-fig <- ggplot(pinguinos, aes(masa_corporal_g, fill = especie)) + 
-  geom_density(alpha = 0.7) + 
-  theme_bw(base_size = 30) + 
-  theme(legend.position = c(0.8, 0.89),
-        legend.margin = margin(),
-        legend.title = element_blank()) 
+Inferir a extensão espacial 
 
-fig
-cvd_grid(ggplot(pinguinos, aes(masa_corporal_g, fill = especie)) + 
-           geom_density(alpha = 0.7) +  
-           theme_bw(base_size = 18) +
-           theme(legend.position = c(0.7, 0.85),
-                 legend.margin = margin(),
-                 legend.title = element_blank(),
-                 legend.text = element_text(size = 12),
-                 legend.key.size = unit(8,'points')) 
-)
+```{r infer_extent, echo=TRUE}
+# result_ext = gridder::infer_extent(method="crs_extent",
+#                           crs_grid=results_crs$selected$code[1],
+#                           flag_adjust_by_res=TRUE,
+#                           res_x=result_res$res_x,
+#                           res_y=result_res$res_y)
+# 
+# print(result_ext)
+
+```
+---
+### `grid_generation`
+
+Simulando um sistema de grade baseado em metadados
+
+```{r metadata, echo=TRUE}
+
 
 ```
 
-
 ---
+### `grid_generation`
 
-Ahora usemos colores más amigables con scale_fill_viridis()
+Simulando um sistema de grade baseado em metadados
 
-```{r,echo=FALSE,warning=FALSE,message=FALSE,fig.show="hold",out.width="50%",fig.alt="Se muestran gráficas de densidad con los datos de la masa corporal de pinguinos de las especies Adelie, Chinstrap y Gentoo del conjunto de datos pinguinos del paquete en español datos separados por color de acuerdo con la especie, con ayuda de la escala viridis. En la columna izquierda se están utilizando los colores morado, esmeralda y amarillo. En la columna derecha se muestra la simulación de cómo se vería la gráfica de la izquierda considerando cuatro deficiencias visuales: Deutanomalía,Protanomalía, Tritanomalía y Desaturado."}
-fig2 <- ggplot(pinguinos, aes(masa_corporal_g, fill = especie)) + 
-  geom_density(alpha = 0.7) + 
-  theme_bw(base_size = 30) + 
-  theme(legend.position = c(0.8, 0.89),
-        legend.margin = margin(),
-        legend.title = element_blank()) +
-  scale_fill_viridis(discrete = TRUE)
+```{r grid_generation}
+# simulated_grid = gridder::grid_generation(res_x=result_res$res_x,
+#                                           res_y=result_res$res_y,
+#                                           unit="m",
+#                                           flag_crs=TRUE,
+#                                           country="France",
+#                                           extent_unit="empirical_occ_extent",
+#                                           input_extent=result_ext,
+#                                           flag_offset=c(0,-result_res$res_y*10,
+#                                                         result_res$res_x*10,0),
+#                                           crs_num=results_crs$selected$code[1],
+#                                           flag_maskByCountry=TRUE)
+```
+---
+### `grid_generation`
 
-fig2
-cvd_grid(ggplot(pinguinos, aes(masa_corporal_g, fill = especie)) + 
-           geom_density(alpha = 0.7) +  
-           theme_bw(base_size = 18) +
-           theme(legend.position = c(0.7, 0.85),
-                 legend.margin = margin(),
-                 legend.title = element_blank(),
-                 legend.text = element_text(size = 12),
-                 legend.key.size = unit(8,'points')) + 
-           scale_fill_viridis(discrete = TRUE) 
-)
+Checando o sistema de grade simulada com as ocorrências
+
+```{r check simulated, echo= TRUE}
+# plot(simulated_grid,
+#       xlim=c(extent(input_occ_prj)[1],extent(input_occ_prj)[1]+110000),
+#       ylim=c(extent(input_occ_prj)[3],extent(input_occ_prj)[3]+110000))
+# plot(input_occ_prj,add=T,col="red")
 ```
 
 ---
+##### Calculando a variação ambiental de um sistema de grade
 
-# Alt-text
+Usamos algumas funções baseadas no pacote rgee. Por isso começamos executando a função `ee_Initialize` 
 
-Recuerda agregar texto alternativo a tus figuras, describiendo los elementos que contienen y el mensaje que deseas transmitir con ellas.
+```{r initi, echo=TRUE}
+rgee::ee_Initialize()
+```
+---
 
-Puedes usar la opción fig.alt del chunk de R para agregar el texto alternativo.
+`grid_ID_9`, exp. de grade disponibilizado no pacote
+
+```{r gri_id_9, echo=TRUE, warning=FALSE, fig.align='center', fig.width=6,fig.height=6}
+data("grid_ID_9")
+plot(grid_ID_9)
+```
+---
+
+Transformando o grid_Id_9 em objeto de imagem "leǵivel" para o rgee (GEE)
+```{r sf_as_ee, echo=TRUE}
+grid = grid_ID_9 |> 
+  rgee::sf_as_ee()
+```
+---
+Read a global elevation data in 30 meters. We do not plot due to extension and resolution
+
+```{r rgee_nasaden, echo=TRUE}
+nasadem = rgee::ee$Image('NASA/NASADEM_HGT/001')$select('elevation')  
+```
+---
+### `assess_env_uncertainty`
+  
+```{r uncert, echo=TRUE}
+std_dev = gridder::assess_env_uncertainty(x= nasadem, y= grid)
+```
+---
+### `assess_env_uncertainty`
+```{r uncert_2, echo=TRUE}
+print(std_dev, n=5)
+```
+print(std_dev, n=5)
+---
+
+Visualizando a variação ambiental no espaço geográfico
+<br/>
+<br/>
+<br/>
+```{r uncert_plot_code, echo=TRUE, eval=FALSE}
+library(ggplot2)
+ggplot(data = grid_ID_9) +
+  geom_sf(aes(fill = std_dev$elevation))+
+  scale_fill_viridis_c(option = "plasma", trans = "sqrt")
+```
+
+---
+Visualizando a variação ambiental no espaço geográfico
+
+```{r uncert_plot, echo= FALSE, fig.align='center', fig.width=8,fig.height=8}
+library(ggplot2)
+ggplot(data = grid_ID_9) +
+  geom_sf(aes(fill = std_dev$elevation))+
+  scale_fill_viridis_c(option = "plasma", trans = "sqrt")
+```
+---
+class: middle, inverse, title-slide
+
+.pull-left[
+<br/>
+<br/>
+<br/>
+<br/>
+# Obrigada! Gracías
+<br/>
+
+]
+
+.pull-right[
+
+### `r rmarkdown::metadata$author`
+<br/>
+<br/>
+<img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/11633554?v=4" width="150px"/>
+
+### `r rmarkdown::metadata$role`
+
+### `r rmarkdown::metadata$org`
+
+[`r fontawesome::fa("github")` @Tai-Rocha](https://github.com/Tai-Rocha)    
+[`r fontawesome::fa("twitter")` @Tai_Rocha_](https://twitter.com/Tai_Rocha_)   
+[`r fontawesome::fa("link")` tainaweb-en.netlify.app](https://tainaweb-en.netlify.app/)
+]

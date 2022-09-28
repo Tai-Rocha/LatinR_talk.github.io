@@ -1,1 +1,1 @@
-# LatinR_talk
+# xaringan_latinR
