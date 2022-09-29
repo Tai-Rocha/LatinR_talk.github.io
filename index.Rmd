@@ -235,8 +235,8 @@ class: middle, inverse, title-slide
 <br/>
 <br/>
 <br/>
-<br/>
-# Obrigada! Gracías
+# Obrigada! 
+# Gracias!
 <br/>
 
 ]
