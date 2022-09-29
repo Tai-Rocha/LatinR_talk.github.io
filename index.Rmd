@@ -31,6 +31,19 @@ Bióloga | MSc. Biologia Ambiental | PhD. in Zoologia <br>
 <br/>
 <br/>
 .pull-left[
+```{r gridder_3, echo=FALSE, fig.align='center', out.width="50%"}
+knitr::include_graphics("images/logo.png")
+```
+]
+
+```{r paper, echo=FALSE, fig.align='center', out.width="50%"}
+knitr::include_url("https://ecoevorxiv.org/6qy5u/", height = 450)
+```
+---
+[GridDER: Grid Detection and Evaluation in R, 2022](https://ecoevorxiv.org/6qy5u/)
+<br/>
+<br/>
+.pull-left[
 ```{r gridder, echo=FALSE, fig.align='center', out.width="50%"}
 knitr::include_graphics("images/logo.png")
 ```
@@ -52,19 +65,6 @@ knitr::include_graphics("images/logo.png")
 Ex.: Dados de grade GBIF
 ```{r sisgrades, echo=FALSE, fig.align='center', out.width="50%"}
 knitr::include_graphics("images/grades.png")
-```
----
-[GridDER: Grid Detection and Evaluation in R, 2022](https://ecoevorxiv.org/6qy5u/)
-<br/>
-<br/>
-.pull-left[
-```{r gridder_3, echo=FALSE, fig.align='center', out.width="50%"}
-knitr::include_graphics("images/logo.png")
-```
-]
-
-```{r paper, echo=FALSE, fig.align='center', out.width="50%"}
-knitr::include_url("https://ecoevorxiv.org/6qy5u/", height = 450)
 ```
 ---
 
