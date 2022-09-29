@@ -2,8 +2,8 @@
 title: "GridDER"
 subtitle: "Detecção e avaliação de dados de grade no R"
 author: " "
-institute: "Latin R 2022"
-date: "10-12 de octubre de 2022"
+institute: "LatinR 2022"
+date: "10 a 14 de outubro de 2022"
 output:
   xaringan::moon_reader:
     css: ["latinR.css"]
